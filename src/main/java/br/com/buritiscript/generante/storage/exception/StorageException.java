@@ -1,4 +1,4 @@
-package br.com.buritiscript.generante.service.storage.exception;
+package br.com.buritiscript.generante.storage.exception;
 
 public class StorageException extends RuntimeException{
     public StorageException(String message) {
