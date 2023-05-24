@@ -49,10 +49,15 @@ public class FileUploadController {
 
     @PostMapping("/")
 	public String handleFileUpload(@RequestParam("file") MultipartFile file) {
+
 		storageService.store(file);
+
 		return file.getOriginalFilename();
 	}
 
-
+    // @ExceptionHandler(StorageFileNotFoundException.class)
+	// public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
+	// 	return ResponseEntity.notFound().build();
+	// }
 
 }
