@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Iterator;
-
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -39,6 +39,38 @@ import org.apache.poi.ss.usermodel.Row;
 @RestController
 public class ConverterController {
 
+    @GetMapping("/leitor/colunas")
+    public int buscaColunasExcel() {
+        try {
+            FileInputStream arquivo = new FileInputStream("upload-dir/guarda.xlsx");
+            XSSFWorkbook planilha = new XSSFWorkbook(arquivo);
+            XSSFSheet folha = planilha.getSheetAt(0);
+            Iterator<Row> linhaIterator = folha.iterator();
+
+            int numLinha = 0;
+            String arquivoPath = "upload-dir/concurso2023.xml";
+
+            while (linhaIterator.hasNext()){
+                Row linha = linhaIterator.next();
+                Iterator<Cell> celulIterator = linha.cellIterator();
+                    
+                    while(celulIterator.hasNext()) {
+                       Cell celula = celulIterator.next();
+
+                       if(celula.getStringCellValue().equals("CPF")){
+                            return celula.getColumnIndex();
+                       }
+                        
+                    }
+               numLinha++;
+           }
+
+        } catch (Exception e) {
+            
+        }
+        return 100;
+        
+    }
 
 
     @GetMapping("/leitor")
@@ -165,7 +197,7 @@ public class ConverterController {
                    
                } 
                numLinha++;
-           }
+            }
 
            //construção do XML
            TransformerFactory tf = TransformerFactory.newInstance();
