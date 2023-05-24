@@ -1,4 +1,4 @@
-package br.com.buritiscript.generante.service.storage;
+package br.com.buritiscript.generante.storage.service;
 
 import java.util.stream.Stream;
 
@@ -14,4 +14,5 @@ public interface StorageService {
     Stream<Path> loadAll();
     Resource loadAsResource(String fileName);
     void deleteAll();
+    Path load(String fileName);
 }
