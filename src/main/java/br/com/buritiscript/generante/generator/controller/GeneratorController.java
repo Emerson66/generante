@@ -146,11 +146,11 @@ public class GeneratorController {
             edital.setAttributeNode(lpublicacao);
 
             Attr datapublicacao = d.createAttribute("datapublicacao");
-            datapublicacao.setValue("XX/XX/XXXX");
+            datapublicacao.setValue("25/05/2023");
             edital.setAttributeNode(datapublicacao);
 
             Attr ano = d.createAttribute("ano");
-            ano.setValue("XXXX");
+            ano.setValue("2023");
             edital.setAttributeNode(ano);
 
 // -------------------------------------------------------------------------------------------------------------------------------
@@ -162,6 +162,10 @@ public class GeneratorController {
 
             Element tipoEdital = d.createElement("tipoEdital");
             edital.appendChild(tipoEdital);
+
+            Attr idTipoEdital = d.createAttribute("id");
+            idTipoEdital.setValue("");
+            tipoEdital.setAttributeNode(idTipoEdital);
 // -------------------------------------------------------------------------------------------------------------------------------
             Element modalidadeConcurso = d.createElement("modalidadeConcurso");
             concurso.appendChild(modalidadeConcurso);
@@ -218,7 +222,7 @@ public class GeneratorController {
 // -------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------------------------
             Element inscritos = d.createElement("inscritos");
-            concursos.appendChild(inscritos);
+            cargo_edital.appendChild(inscritos);
             
 
             while (linhaIterator.hasNext()){
@@ -248,14 +252,13 @@ public class GeneratorController {
                 }
 
                 
-                    Element inscrito = d.createElement("inscrito");
-                    inscritos.appendChild(inscrito);
-
+                Element inscrito = d.createElement("inscrito");
+                inscritos.appendChild(inscrito);
+                if(numLinha > 0){
                     while(celulIterator.hasNext()) {
                         Cell celula = celulIterator.next();
                         
-                        if (celula.getColumnIndex() == INSCRICAO){
-                            
+                        if (celula.getColumnIndex() == INSCRICAO){       
                             Attr ninscrito = d.createAttribute("ninscrito");
                             ninscrito.setValue(celula.getStringCellValue());
                             inscrito.setAttributeNode(ninscrito);
@@ -270,10 +273,29 @@ public class GeneratorController {
                             nome.setValue(celula.getStringCellValue());
                             inscrito.setAttributeNode(nome);
                         }
+                        Attr homologado = d.createAttribute("homologado");
+                        homologado.setValue("N");
+                        inscrito.setAttributeNode(homologado);
+
+                        Attr deferido = d.createAttribute("deferido");
+                        deferido.setValue("N");
+                        inscrito.setAttributeNode(deferido);
+
+                        Attr aprovado = d.createAttribute("aprovado");
+                        deferido.setValue("N");
+                        inscrito.setAttributeNode(aprovado);
+
+                        Attr admitido_inscrito = d.createAttribute("admitido_inscrito");
+                        admitido_inscrito.setValue("N");
+                        inscrito.setAttributeNode(admitido_inscrito);
+                        
+                        Attr classificacao = d.createAttribute("classificacao");
+                        classificacao.setValue(numLinha+"");
+                        inscrito.setAttributeNode(classificacao);
+                        
                     }
-                
-                
-               numLinha++;
+                }
+                numLinha++;
             }
 
            //construção do XML

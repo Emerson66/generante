@@ -32,3 +32,6 @@ build/
 ### VS Code ###
 .vscode/
 
+### Generante ###
+/upload-dir/*.xlsx
+/upload-dir/*.xml
