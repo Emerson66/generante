@@ -156,16 +156,66 @@ public class GeneratorController {
 // -------------------------------------------------------------------------------------------------------------------------------
             Element docdigital = d.createElement("docdigital");
             edital.appendChild(docdigital);
+
+            Element observacao = d.createElement("observacao");
+            edital.appendChild(observacao);
+
+            Element tipoEdital = d.createElement("tipoEdital");
+            edital.appendChild(tipoEdital);
 // -------------------------------------------------------------------------------------------------------------------------------
+            Element modalidadeConcurso = d.createElement("modalidadeConcurso");
+            concurso.appendChild(modalidadeConcurso);
+
+            Attr idModalidadeConcurso = d.createAttribute("id");
+            idModalidadeConcurso.setValue("");
+            modalidadeConcurso.setAttributeNode(idModalidadeConcurso);
+// -------------------------------------------------------------------------------------------------------------------------------
+            Element regimeJuridico = d.createElement("regimeJuridico");
+            concurso.appendChild(regimeJuridico);
+
+            Attr idRegimeJuridico = d.createAttribute("id");
+            idRegimeJuridico.setValue("");
+            regimeJuridico.setAttributeNode(idRegimeJuridico);
 
 // -------------------------------------------------------------------------------------------------------------------------------
-
+            Element texto_ldo = d.createElement("texto_ldo");
+            concurso.appendChild(texto_ldo);
+// -------------------------------------------------------------------------------------------------------------------------------
+            Element texto_lei_especial = d.createElement("texto_lei_especial");
+            concurso.appendChild(texto_lei_especial);
 
 // -------------------------------------------------------------------------------------------------------------------------------
-
+            Element texto_loa = d.createElement("texto_loa");
+            concurso.appendChild(texto_loa);
 // -------------------------------------------------------------------------------------------------------------------------------
+            Element texto_ppa = d.createElement("texto_ppa");
+            concurso.appendChild(texto_ppa);
+// -------------------------------------------------------------------------------------------------------------------------------
+            Element cargos = d.createElement("cargos");
+            concurso.appendChild(cargos);
+// -------------------------------------------------------------------------------------------------------------------------------
+            Element cargo_edital = d.createElement("cargo_edital");
+            cargos.appendChild(cargo_edital);
 
+            Attr nvagas = d.createAttribute("nvagas");
+            nvagas.setValue("");
+            cargo_edital.setAttributeNode(nvagas);
+// -------------------------------------------------------------------------------------------------------------------------------
+            Element cargo = d.createElement("cargo");
+            cargo_edital.appendChild(cargo);
 
+            Attr descricaoCargo = d.createAttribute("descricao");
+            descricaoCargo.setValue("");
+            cargo.setAttributeNode(descricaoCargo);
+
+            Attr codigo = d.createAttribute("codigo");
+            codigo.setValue("");
+            cargo.setAttributeNode(codigo);
+// -------------------------------------------------------------------------------------------------------------------------------
+            Element escolaridade = d.createElement("escolaridade");
+            cargo_edital.appendChild(escolaridade);
+// -------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------------------------
             Element inscritos = d.createElement("inscritos");
             concursos.appendChild(inscritos);
@@ -202,24 +252,24 @@ public class GeneratorController {
                     inscritos.appendChild(inscrito);
 
                     while(celulIterator.hasNext()) {
-                       Cell celula = celulIterator.next();
-                       
-                       if (celula.getColumnIndex() == INSCRICAO){
+                        Cell celula = celulIterator.next();
                         
-                        Attr ninscrito = d.createAttribute("ninscrito");
-                        ninscrito.setValue(celula.getStringCellValue());
-                        inscrito.setAttributeNode(ninscrito);
-                       }
-                       if (celula.getColumnIndex() == CPF){
-                        Attr cpf = d.createAttribute("cpf");
-                        cpf.setValue(celula.getStringCellValue());
-                        inscrito.setAttributeNode(cpf);
-                       }
-                       if (celula.getColumnIndex() == NOME){
-                        Attr nome = d.createAttribute("nome");
-                        nome.setValue(celula.getStringCellValue());
-                        inscrito.setAttributeNode(nome);
-                       }
+                        if (celula.getColumnIndex() == INSCRICAO){
+                            
+                            Attr ninscrito = d.createAttribute("ninscrito");
+                            ninscrito.setValue(celula.getStringCellValue());
+                            inscrito.setAttributeNode(ninscrito);
+                        }
+                        if (celula.getColumnIndex() == CPF){
+                            Attr cpf = d.createAttribute("cpf");
+                            cpf.setValue(celula.getStringCellValue());
+                            inscrito.setAttributeNode(cpf);
+                        }
+                        if (celula.getColumnIndex() == NOME){
+                            Attr nome = d.createAttribute("nome");
+                            nome.setValue(celula.getStringCellValue());
+                            inscrito.setAttributeNode(nome);
+                        }
                     }
                 
                 
