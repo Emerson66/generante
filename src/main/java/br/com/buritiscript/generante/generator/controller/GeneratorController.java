@@ -1,4 +1,4 @@
-package br.com.buritiscript.generante.geradorXml.controller;
+package br.com.buritiscript.generante.generator.controller;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,6 +16,7 @@ import javax.xml.transform.stream.StreamResult;
 
 
 import java.io.IOException;
+
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,46 +38,47 @@ import org.apache.poi.ss.usermodel.Row;
 
 
 @RestController
-public class ConverterController {
+public class GeneratorController {
 
-    @GetMapping("/leitor/colunas")
-    public int buscaColunasExcel() {
+    public Integer getIndexColunas(String collumnName) {
+        Integer i = null;
         try {
             FileInputStream arquivo = new FileInputStream("upload-dir/guarda.xlsx");
             XSSFWorkbook planilha = new XSSFWorkbook(arquivo);
             XSSFSheet folha = planilha.getSheetAt(0);
             Iterator<Row> linhaIterator = folha.iterator();
 
-            int numLinha = 0;
-            String arquivoPath = "upload-dir/concurso2023.xml";
 
             while (linhaIterator.hasNext()){
                 Row linha = linhaIterator.next();
                 Iterator<Cell> celulIterator = linha.cellIterator();
                     
-                    while(celulIterator.hasNext()) {
+                   
                        Cell celula = celulIterator.next();
 
-                       if(celula.getStringCellValue().equals("CPF")){
-                            return celula.getColumnIndex();
+                       if(celula.getStringCellValue().equals("collumnName")){
+                            i = celula.getColumnIndex();
+                            break;
                        }
                         
-                    }
-               numLinha++;
            }
 
         } catch (Exception e) {
             
         }
-        return 100;
         
+        return i;
     }
 
 
     @GetMapping("/leitor")
-    public void lerExcel() throws IOException, ParserConfigurationException, TransformerException{
-        try {
+    public void gerarXml() throws IOException, ParserConfigurationException, TransformerException{
 
+        
+        try {
+             Integer CPF = null;
+             Integer INSCRICAO = null;
+             Integer NOME = null;
             FileInputStream arquivo = new FileInputStream("upload-dir/guarda.xlsx");
             XSSFWorkbook planilha = new XSSFWorkbook(arquivo);
             XSSFSheet folha = planilha.getSheetAt(0);
@@ -172,30 +174,55 @@ public class ConverterController {
             while (linhaIterator.hasNext()){
                 Row linha = linhaIterator.next();
                 Iterator<Cell> celulIterator = linha.cellIterator();
-               
-               if(numLinha > 0){
+                Iterator<Cell> celulIterator1 = linha.cellIterator();
+                if(numLinha == 0){
+                    while(((CPF == null) || (NOME == null) || (INSCRICAO == null)) && (celulIterator1.hasNext())){
+                        Cell celula1 = celulIterator1.next();
+                        if(celula1.getColumnIndex() ==0) {
+                            System.out.println(
+                                celula1.getColumnIndex()
+                            );
+                        }
+                        if(celula1.getStringCellValue().equals("Inscrição")){
+                            
+                            INSCRICAO = celula1.getColumnIndex();
+                        }
+                        if(celula1.getStringCellValue().equals("Nome")){
+                            NOME = celula1.getColumnIndex();
+                        }
+                        if(celula1.getStringCellValue().equals("CPF")){
+                            CPF = celula1.getColumnIndex();
+                        }
+                        
+                    }
+                }
+
+                
                     Element inscrito = d.createElement("inscrito");
                     inscritos.appendChild(inscrito);
 
                     while(celulIterator.hasNext()) {
                        Cell celula = celulIterator.next();
-                       switch (celula.getColumnIndex()) {
-                           case 0:
-                                Attr ninscrito = d.createAttribute("ninscrito");
-                                ninscrito.setValue(celula.getStringCellValue());
-                                inscrito.setAttributeNode(ninscrito);
-                            break;
-                            case 1: 
-                                Attr nome = d.createAttribute("nome");
-                                nome.setValue(celula.getStringCellValue());
-                                inscrito.setAttributeNode(nome);
-                            break;
-                        }
+                       
+                       if (celula.getColumnIndex() == INSCRICAO){
                         
-                        
+                        Attr ninscrito = d.createAttribute("ninscrito");
+                        ninscrito.setValue(celula.getStringCellValue());
+                        inscrito.setAttributeNode(ninscrito);
+                       }
+                       if (celula.getColumnIndex() == CPF){
+                        Attr cpf = d.createAttribute("cpf");
+                        cpf.setValue(celula.getStringCellValue());
+                        inscrito.setAttributeNode(cpf);
+                       }
+                       if (celula.getColumnIndex() == NOME){
+                        Attr nome = d.createAttribute("nome");
+                        nome.setValue(celula.getStringCellValue());
+                        inscrito.setAttributeNode(nome);
+                       }
                     }
-                   
-               } 
+                
+                
                numLinha++;
             }
 

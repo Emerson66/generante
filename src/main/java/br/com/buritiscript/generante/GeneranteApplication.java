@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 
+
 import br.com.buritiscript.generante.storage.properties.StorageProperties;
 import br.com.buritiscript.generante.storage.service.StorageService;
 
@@ -22,6 +23,7 @@ public class GeneranteApplication {
 		return (args) -> {
 			storageService.deleteAll();
 			storageService.init();
+			
 		};
 	}
 }
