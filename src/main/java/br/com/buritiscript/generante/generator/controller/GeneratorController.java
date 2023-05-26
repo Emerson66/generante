@@ -164,21 +164,21 @@ public class GeneratorController {
             edital.appendChild(tipoEdital);
 
             Attr idTipoEdital = d.createAttribute("id");
-            idTipoEdital.setValue("");
+            idTipoEdital.setValue("2");
             tipoEdital.setAttributeNode(idTipoEdital);
 // -------------------------------------------------------------------------------------------------------------------------------
             Element modalidadeConcurso = d.createElement("modalidadeConcurso");
             concurso.appendChild(modalidadeConcurso);
 
             Attr idModalidadeConcurso = d.createAttribute("id");
-            idModalidadeConcurso.setValue("");
+            idModalidadeConcurso.setValue("2");
             modalidadeConcurso.setAttributeNode(idModalidadeConcurso);
 // -------------------------------------------------------------------------------------------------------------------------------
             Element regimeJuridico = d.createElement("regimeJuridico");
             concurso.appendChild(regimeJuridico);
 
             Attr idRegimeJuridico = d.createAttribute("id");
-            idRegimeJuridico.setValue("");
+            idRegimeJuridico.setValue("4");
             regimeJuridico.setAttributeNode(idRegimeJuridico);
 
 // -------------------------------------------------------------------------------------------------------------------------------
@@ -202,22 +202,26 @@ public class GeneratorController {
             cargos.appendChild(cargo_edital);
 
             Attr nvagas = d.createAttribute("nvagas");
-            nvagas.setValue("");
+            nvagas.setValue("150");
             cargo_edital.setAttributeNode(nvagas);
 // -------------------------------------------------------------------------------------------------------------------------------
             Element cargo = d.createElement("cargo");
             cargo_edital.appendChild(cargo);
 
             Attr descricaoCargo = d.createAttribute("descricao");
-            descricaoCargo.setValue("");
+            descricaoCargo.setValue("TESTE");
             cargo.setAttributeNode(descricaoCargo);
 
             Attr codigo = d.createAttribute("codigo");
-            codigo.setValue("");
+            codigo.setValue("12345678");
             cargo.setAttributeNode(codigo);
 // -------------------------------------------------------------------------------------------------------------------------------
             Element escolaridade = d.createElement("escolaridade");
             cargo_edital.appendChild(escolaridade);
+            
+            Attr idEscolaridade = d.createAttribute("id");
+            idEscolaridade.setValue("5");
+            escolaridade.setAttributeNode(idEscolaridade);
 // -------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------------------------
@@ -252,14 +256,15 @@ public class GeneratorController {
                 }
 
                 
+                
+                if(numLinha > 0){
                 Element inscrito = d.createElement("inscrito");
                 inscritos.appendChild(inscrito);
-                if(numLinha > 0){
                     while(celulIterator.hasNext()) {
                         Cell celula = celulIterator.next();
                         
                         if (celula.getColumnIndex() == INSCRICAO){       
-                            Attr ninscrito = d.createAttribute("ninscrito");
+                            Attr ninscrito = d.createAttribute("ninscricao");
                             ninscrito.setValue(celula.getStringCellValue());
                             inscrito.setAttributeNode(ninscrito);
                         }
@@ -282,7 +287,7 @@ public class GeneratorController {
                         inscrito.setAttributeNode(deferido);
 
                         Attr aprovado = d.createAttribute("aprovado");
-                        deferido.setValue("N");
+                        aprovado.setValue("N");
                         inscrito.setAttributeNode(aprovado);
 
                         Attr admitido_inscrito = d.createAttribute("admitido_inscrito");
