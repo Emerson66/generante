@@ -35,3 +35,6 @@ build/
 ### Generante ###
 /upload-dir/*.xlsx
 /upload-dir/*.xml
+
+upload-dir/*.xlsx
+upload-dir/*.xml
