@@ -3,8 +3,11 @@ package br.com.buritiscript.generante.generator.controller;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,7 +20,7 @@ import javax.xml.transform.stream.StreamResult;
 
 import java.io.IOException;
 
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,6 +29,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+
+import br.com.buritiscript.generante.generator.service.GeneratorService;
 
 import javax.xml.parsers.DocumentBuilder;
 
@@ -40,34 +45,19 @@ import org.apache.poi.ss.usermodel.Row;
 @RestController
 public class GeneratorController {
 
-    public Integer getIndexColunas(String collumnName) {
-        Integer i = null;
-        try {
-            FileInputStream arquivo = new FileInputStream("upload-dir/guarda.xlsx");
-            XSSFWorkbook planilha = new XSSFWorkbook(arquivo);
-            XSSFSheet folha = planilha.getSheetAt(0);
-            Iterator<Row> linhaIterator = folha.iterator();
+    @Autowired
+    private GeneratorService generatorService;
 
 
-            while (linhaIterator.hasNext()){
-                Row linha = linhaIterator.next();
-                Iterator<Cell> celulIterator = linha.cellIterator();
-                    
-                   
-                       Cell celula = celulIterator.next();
 
-                       if(celula.getStringCellValue().equals("collumnName")){
-                            i = celula.getColumnIndex();
-                            break;
-                       }
-                        
-           }
 
-        } catch (Exception e) {
-            
-        }
+    @GetMapping("/teste")
+    public Map<String, Integer> getIndexColunas() throws IOException {
         
-        return i;
+        Map<String, Integer> indexMap = new HashMap<String, Integer>();
+        indexMap = generatorService.getIndexColunas();
+
+        return indexMap;
     }
 
 
@@ -76,9 +66,9 @@ public class GeneratorController {
 
         
         try {
-             Integer CPF = null;
-             Integer INSCRICAO = null;
-             Integer NOME = null;
+            Integer CPF = null;
+            Integer INSCRICAO = null;
+            Integer NOME = null;
             FileInputStream arquivo = new FileInputStream("upload-dir/guarda.xlsx");
             XSSFWorkbook planilha = new XSSFWorkbook(arquivo);
             XSSFSheet folha = planilha.getSheetAt(0);
@@ -227,35 +217,14 @@ public class GeneratorController {
 // -------------------------------------------------------------------------------------------------------------------------------
             Element inscritos = d.createElement("inscritos");
             cargo_edital.appendChild(inscritos);
-            
+
+            Map<String, Integer> indexMap = new HashMap<String, Integer>();
+            indexMap = generatorService.getIndexColunas();
 
             while (linhaIterator.hasNext()){
                 Row linha = linhaIterator.next();
                 Iterator<Cell> celulIterator = linha.cellIterator();
-                Iterator<Cell> celulIterator1 = linha.cellIterator();
-                if(numLinha == 0){
-                    while(((CPF == null) || (NOME == null) || (INSCRICAO == null)) && (celulIterator1.hasNext())){
-                        Cell celula1 = celulIterator1.next();
-                        if(celula1.getColumnIndex() ==0) {
-                            System.out.println(
-                                celula1.getColumnIndex()
-                            );
-                        }
-                        if(celula1.getStringCellValue().equals("Inscrição")){
-                            
-                            INSCRICAO = celula1.getColumnIndex();
-                        }
-                        if(celula1.getStringCellValue().equals("Nome")){
-                            NOME = celula1.getColumnIndex();
-                        }
-                        if(celula1.getStringCellValue().equals("CPF")){
-                            CPF = celula1.getColumnIndex();
-                        }
-                        
-                    }
-                }
 
-                
                 
                 if(numLinha > 0){
                 Element inscrito = d.createElement("inscrito");
@@ -263,17 +232,17 @@ public class GeneratorController {
                     while(celulIterator.hasNext()) {
                         Cell celula = celulIterator.next();
                         
-                        if (celula.getColumnIndex() == INSCRICAO){       
+                        if (celula.getColumnIndex() == indexMap.get("Inscrição")){       
                             Attr ninscrito = d.createAttribute("ninscricao");
                             ninscrito.setValue(celula.getStringCellValue());
                             inscrito.setAttributeNode(ninscrito);
                         }
-                        if (celula.getColumnIndex() == CPF){
+                        if (celula.getColumnIndex() == indexMap.get("CPF")){
                             Attr cpf = d.createAttribute("cpf");
                             cpf.setValue(celula.getStringCellValue());
                             inscrito.setAttributeNode(cpf);
                         }
-                        if (celula.getColumnIndex() == NOME){
+                        if (celula.getColumnIndex() == indexMap.get("Nome")){
                             Attr nome = d.createAttribute("nome");
                             nome.setValue(celula.getStringCellValue());
                             inscrito.setAttributeNode(nome);
