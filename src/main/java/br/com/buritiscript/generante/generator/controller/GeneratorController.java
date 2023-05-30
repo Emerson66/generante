@@ -20,6 +20,8 @@ import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -46,25 +48,14 @@ public class GeneratorController {
     @Autowired
     private GeneratorService generatorService;
 
+ 
 
-
-
-    @GetMapping("/teste")
-    public Map<String, Integer> getIndexColunas() throws IOException {
-        
-        Map<String, Integer> indexMap = new HashMap<String, Integer>();
-        indexMap = generatorService.getIndexColunas();
-
-        return indexMap;
-    }
-
-
-    @GetMapping("/leitor")
-    public void gerarXml() throws IOException, ParserConfigurationException, TransformerException{
+    @GetMapping("/files/{fileName}")
+    public void gerarXml(@PathVariable String fileName) throws IOException, ParserConfigurationException, TransformerException{
 
         
         try {
-            FileInputStream arquivo = new FileInputStream("upload-dir/guarda.xlsx");
+            FileInputStream arquivo = new FileInputStream("upload-dir/"+fileName);
             XSSFWorkbook planilha = new XSSFWorkbook(arquivo);
             XSSFSheet folha = planilha.getSheetAt(0);
             Iterator<Row> linhaIterator = folha.iterator();

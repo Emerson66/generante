@@ -11,6 +11,7 @@ import br.com.buritiscript.generante.storage.exception.StorageException;
 import br.com.buritiscript.generante.storage.exception.StorageFileNotFoundException;
 import br.com.buritiscript.generante.storage.properties.StorageProperties;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -32,6 +33,12 @@ public class FileSystemStorageService implements StorageService{
 		try {
 			if (file.isEmpty()) {
 				throw new StorageException("Arquivo vazio, falha ao armazenar " + file.getOriginalFilename());
+			}
+			
+			
+				
+			if(Files.exists(rootLocation.resolve(file.getOriginalFilename()))){
+				throw new StorageFileNotFoundException("Arquivo já existe!" );
 			}
 			Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
 		} catch (IOException e) {
@@ -63,8 +70,7 @@ public class FileSystemStorageService implements StorageService{
 			Resource resource = new UrlResource(file.toUri());
 			if(resource.exists() || resource.isReadable()) {
 				return resource;
-			}
-			else {
+			}else {
 				throw new StorageFileNotFoundException("Não foi possível ler o arquivo: " + filename);
 
 			}
