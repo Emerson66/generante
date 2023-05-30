@@ -4,10 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -66,9 +64,6 @@ public class GeneratorController {
 
         
         try {
-            Integer CPF = null;
-            Integer INSCRICAO = null;
-            Integer NOME = null;
             FileInputStream arquivo = new FileInputStream("upload-dir/guarda.xlsx");
             XSSFWorkbook planilha = new XSSFWorkbook(arquivo);
             XSSFSheet folha = planilha.getSheetAt(0);

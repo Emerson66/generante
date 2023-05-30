@@ -31,11 +31,11 @@ public class FileSystemStorageService implements StorageService{
 	public void store(MultipartFile file) {
 		try {
 			if (file.isEmpty()) {
-				throw new StorageException("Failed to store empty file " + file.getOriginalFilename());
+				throw new StorageException("Arquivo vazio, falha ao armazenar " + file.getOriginalFilename());
 			}
 			Files.copy(file.getInputStream(), this.rootLocation.resolve(file.getOriginalFilename()));
 		} catch (IOException e) {
-			throw new StorageException("Failed to store file " + file.getOriginalFilename(), e);
+			throw new StorageException("Falha ao armazenar arquivo " + file.getOriginalFilename(), e);
 		}
 	}
 
@@ -46,7 +46,7 @@ public class FileSystemStorageService implements StorageService{
 					.filter(path -> !path.equals(this.rootLocation))
 					.map(path -> this.rootLocation.relativize(path));
 		} catch (IOException e) {
-			throw new StorageException("Failed to read stored files", e);
+			throw new StorageException("Falha ao ler arquivos armazenados", e);
 		}
 
 	}
@@ -65,11 +65,11 @@ public class FileSystemStorageService implements StorageService{
 				return resource;
 			}
 			else {
-				throw new StorageFileNotFoundException("Could not read file: " + filename);
+				throw new StorageFileNotFoundException("Não foi possível ler o arquivo: " + filename);
 
 			}
 		} catch (MalformedURLException e) {
-			throw new StorageFileNotFoundException("Could not read file: " + filename, e);
+			throw new StorageFileNotFoundException("Não foi possível ler o arquivo: " + filename, e);
 		}
 	}
 
@@ -83,7 +83,7 @@ public class FileSystemStorageService implements StorageService{
 		try {
 			Files.createDirectory(rootLocation);
 		} catch (IOException e) {
-			throw new StorageException("Could not initialize storage", e);
+			throw new StorageException("Não foi possível inicializar o armazenamento", e);
 		}
 	}
 }
