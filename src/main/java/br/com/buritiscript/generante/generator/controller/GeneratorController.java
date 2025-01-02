@@ -72,7 +72,7 @@ public class GeneratorController {
             int numLinha = 0;
 
 
-            String arquivoPath = "upload-dir/concurso2024.xml";
+            String arquivoPath = "upload-dir/"+fileName+".xml";
  
             DocumentBuilderFactory dbf  =DocumentBuilderFactory.newInstance();
             DocumentBuilder dc = dbf.newDocumentBuilder();
