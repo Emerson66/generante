@@ -50,7 +50,7 @@ public class GeneratorController {
     @Autowired
     private GeneratorService generatorService;
 
-    @GetMapping("loterias")
+    @GetMapping("/loterias")
     public static Set<Integer> aleatoriar() {
         Set<Integer> numerosDaSorte = new HashSet<>();
         Random random = new Random();
