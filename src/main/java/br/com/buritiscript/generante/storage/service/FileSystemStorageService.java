@@ -11,7 +11,6 @@ import br.com.buritiscript.generante.storage.exception.StorageException;
 import br.com.buritiscript.generante.storage.exception.StorageFileNotFoundException;
 import br.com.buritiscript.generante.storage.properties.StorageProperties;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;

@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Random;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,7 +34,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import br.com.buritiscript.generante.generator.service.GeneratorService;
-
 import javax.xml.parsers.DocumentBuilder;
 
 import org.apache.poi.xssf.usermodel.XSSFSheet;
@@ -48,9 +50,17 @@ public class GeneratorController {
     @Autowired
     private GeneratorService generatorService;
 
- 
+    @GetMapping("loterias")
+    public static Set<Integer> aleatoriar() {
+        Set<Integer> numerosDaSorte = new HashSet<>();
+        Random random = new Random();
+        while(numerosDaSorte.size()< 15){
+            numerosDaSorte.add(random.nextInt((25 - 1) + 1) + 1);
+        }
+        return numerosDaSorte;  
+    }
 
-    @GetMapping("/files/{fileName}")
+    @PostMapping("/files/{fileName}")
     public void gerarXml(@PathVariable String fileName) throws IOException, ParserConfigurationException, TransformerException{
 
         
@@ -62,7 +72,7 @@ public class GeneratorController {
             int numLinha = 0;
 
 
-            String arquivoPath = "upload-dir/concurso2023.xml";
+            String arquivoPath = "upload-dir/concurso2024.xml";
  
             DocumentBuilderFactory dbf  =DocumentBuilderFactory.newInstance();
             DocumentBuilder dc = dbf.newDocumentBuilder();
@@ -72,7 +82,7 @@ public class GeneratorController {
             Element concursos = d.createElement("concursos");
             d.appendChild(concursos);
 
-            // descricao="CONCURSO PARA O CARGO DE GUARDA CIVIL MUNICIPAL - EDITAL 01/2"
+            // EX: descricao="CONCURSO PARA O CARGO DE GUARDA CIVIL MUNICIPAL - EDITAL 01/2"
 // -------------------------------------------------------------------------------------------------------------------------------
             Element concurso = d.createElement("concurso");
             concursos.appendChild(concurso);
@@ -86,7 +96,7 @@ public class GeneratorController {
             concurso.setAttributeNode(validade);
 
             Attr descricao = d.createAttribute("descricao");
-            descricao.setValue("CONCURSO PARA O CARGO DE GUARDA CIVIL MUNICIPAL - EDITAL 01/2");
+            descricao.setValue("EDITAL PROCESSO SELETIVO PARA EMPREGO PUBLICO DE ACS E ACE N. 001/2023");
             concurso.setAttributeNode(descricao);
 
 
@@ -122,7 +132,7 @@ public class GeneratorController {
             edital.setAttributeNode(lpublicacao);
 
             Attr datapublicacao = d.createAttribute("datapublicacao");
-            datapublicacao.setValue("25/05/2023");
+            datapublicacao.setValue("22/05/2023");
             edital.setAttributeNode(datapublicacao);
 
             Attr ano = d.createAttribute("ano");
@@ -131,7 +141,9 @@ public class GeneratorController {
 
 // -------------------------------------------------------------------------------------------------------------------------------
             Element docdigital = d.createElement("docdigital");
+            docdigital.appendChild(d.createTextNode("338003698b796b492c49d7cffdc60d1e"));
             edital.appendChild(docdigital);
+
 
             Element observacao = d.createElement("observacao");
             edital.appendChild(observacao);
@@ -154,7 +166,7 @@ public class GeneratorController {
             concurso.appendChild(regimeJuridico);
 
             Attr idRegimeJuridico = d.createAttribute("id");
-            idRegimeJuridico.setValue("4");
+            idRegimeJuridico.setValue("1");
             regimeJuridico.setAttributeNode(idRegimeJuridico);
 
 // -------------------------------------------------------------------------------------------------------------------------------
@@ -178,18 +190,18 @@ public class GeneratorController {
             cargos.appendChild(cargo_edital);
 
             Attr nvagas = d.createAttribute("nvagas");
-            nvagas.setValue("150");
+            nvagas.setValue("178");
             cargo_edital.setAttributeNode(nvagas);
 // -------------------------------------------------------------------------------------------------------------------------------
             Element cargo = d.createElement("cargo");
             cargo_edital.appendChild(cargo);
 
             Attr descricaoCargo = d.createAttribute("descricao");
-            descricaoCargo.setValue("TESTE");
+            descricaoCargo.setValue("AGENTE COMUNITÁRIO DE SAÚDE - ACS");
             cargo.setAttributeNode(descricaoCargo);
 
             Attr codigo = d.createAttribute("codigo");
-            codigo.setValue("12345678");
+            codigo.setValue("5105");
             cargo.setAttributeNode(codigo);
 // -------------------------------------------------------------------------------------------------------------------------------
             Element escolaridade = d.createElement("escolaridade");
@@ -205,7 +217,7 @@ public class GeneratorController {
             cargo_edital.appendChild(inscritos);
 
             Map<String, Integer> indexMap = new HashMap<String, Integer>();
-            indexMap = generatorService.getIndexColunas();
+            indexMap = generatorService.getIndexColunas(fileName);
 
             while (linhaIterator.hasNext()){
                 Row linha = linhaIterator.next();
@@ -218,9 +230,9 @@ public class GeneratorController {
                     while(celulIterator.hasNext()) {
                         Cell celula = celulIterator.next();
                         
-                        if (celula.getColumnIndex() == indexMap.get("Inscrição")){       
+                        if (celula.getColumnIndex() == indexMap.get("INSCRICAO")){       
                             Attr ninscrito = d.createAttribute("ninscricao");
-                            ninscrito.setValue(celula.getStringCellValue());
+                            ninscrito.setValue(String.valueOf((int)celula.getNumericCellValue()));
                             inscrito.setAttributeNode(ninscrito);
                         }
                         if (celula.getColumnIndex() == indexMap.get("CPF")){
@@ -228,7 +240,7 @@ public class GeneratorController {
                             cpf.setValue(celula.getStringCellValue());
                             inscrito.setAttributeNode(cpf);
                         }
-                        if (celula.getColumnIndex() == indexMap.get("Nome")){
+                        if (celula.getColumnIndex() == indexMap.get("NOME")){
                             Attr nome = d.createAttribute("nome");
                             nome.setValue(celula.getStringCellValue());
                             inscrito.setAttributeNode(nome);
@@ -238,16 +250,16 @@ public class GeneratorController {
                         inscrito.setAttributeNode(homologado);
 
                         Attr deferido = d.createAttribute("deferido");
-                        deferido.setValue("N");
+                        deferido.setValue("S");
                         inscrito.setAttributeNode(deferido);
 
                         Attr aprovado = d.createAttribute("aprovado");
                         aprovado.setValue("N");
                         inscrito.setAttributeNode(aprovado);
 
-                        Attr admitido_inscrito = d.createAttribute("admitido_inscrito");
-                        admitido_inscrito.setValue("N");
-                        inscrito.setAttributeNode(admitido_inscrito);
+                        Attr adimitido_inscrito = d.createAttribute("admitido_inscrito");
+                        adimitido_inscrito.setValue("N");
+                        inscrito.setAttributeNode(adimitido_inscrito);
                         
                         Attr classificacao = d.createAttribute("classificacao");
                         classificacao.setValue(numLinha+"");

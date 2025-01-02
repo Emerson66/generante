@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class GeneratorService {
-    public Map<String, Integer> getIndexColunas() throws IOException {
+    public Map<String, Integer> getIndexColunas(String fileName) throws IOException {
         Map<String, Integer> indexColunas = new HashMap<String, Integer>();
 
-        FileInputStream arquivo = new FileInputStream("upload-dir/guarda.xlsx");
+        FileInputStream arquivo = new FileInputStream("upload-dir/"+ fileName);
         XSSFWorkbook planilha = new XSSFWorkbook(arquivo);
         XSSFSheet folha = planilha.getSheetAt(0);
         Iterator<Row> linhaIterator = folha.iterator();
@@ -29,12 +29,11 @@ public class GeneratorService {
 
         while((indexColunas.size() < 3) && (celulIterator.hasNext())){
             Cell celula1 = celulIterator.next();
-            if(celula1.getStringCellValue().equals("Inscrição")){
-                
-                indexColunas.put("Inscrição", celula1.getColumnIndex());
+            if(celula1.getStringCellValue().equals("INSCRICAO")){
+                indexColunas.put("INSCRICAO", celula1.getColumnIndex());
             }
-            if(celula1.getStringCellValue().equals("Nome")){
-                indexColunas.put("Nome", celula1.getColumnIndex());
+            if(celula1.getStringCellValue().equals("NOME")){
+                indexColunas.put("NOME", celula1.getColumnIndex());
             }
             if(celula1.getStringCellValue().equals("CPF")){
                 indexColunas.put("CPF", celula1.getColumnIndex());
